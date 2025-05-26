@@ -1,0 +1,235 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<!-- Modern CSS Framework Imports -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-content">
+    <h1 class="hero-title animate__animated animate__fadeInDown">Empowering Your <span>Legal Journey</span></h1>
+    <p class="hero-text animate__animated animate__fadeInUp">Access India's premier legal resources with intuitive navigation and expert guidance</p>
+  </div>
+</section>
+
+<!-- Stats Bar -->
+<div class="stats-bar animate__animated animate__fadeIn animate__delay-1s">
+  <div class="stat-item">
+    <div class="stat-number">50+</div>
+    <div class="stat-label">Legal Documents</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">24/7</div>
+    <div class="stat-label">Updated Resources</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">10K+</div>
+    <div class="stat-label">Monthly Users</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">500+</div>
+    <div class="stat-label">Case References</div>
+  </div>
+</div>
+
+<!-- Main Content Container -->
+<div class="main-container">
+
+  <!-- Legal Resources Section -->
+  <section class="legal-resources-section">
+    <div class="section-header">
+      <h2>Legal Resources</h2>
+      <p class="section-subtitle">Browse and download essential legal documents</p>
+      <div class="section-decoration"></div>
+    </div>
+
+    <div class="resources-grid">
+      <div class="resource-card">
+        <div class="resource-icon"><i class="fas fa-gavel"></i></div>
+        <div class="resource-image" style="background-image: url('../static/images/ipc.jpg');"></div>
+        <h3>Indian Penal Code (IPC)</h3>
+        <p class="resource-description">Complete text of the IPC with latest amendments</p>
+        <div class="button-container">
+          <a href="{{ url_for('static', filename='files/ipc_sections.pdf') }}" download class="download-btn">
+            <i class="fas fa-download"></i> Download PDF
+          </a>
+        </div>
+      </div>
+
+      <div class="resource-card">
+        <div class="resource-icon"><i class="fas fa-book"></i></div>
+        <div class="resource-image" style="background-image: url('../static/images/coi.jpg');"></div>
+        <h3>Constitution of India</h3>
+        <p class="resource-description">The supreme law of India with all schedules</p>
+        <div class="button-container">
+          <a href="{{ url_for('static', filename='files/constitution.pdf') }}" download class="download-btn">
+            <i class="fas fa-download"></i> Download PDF
+          </a>
+        </div>
+      </div>
+
+      <div class="resource-card">
+        <div class="resource-icon"><i class="fas fa-handcuffs"></i></div>
+        <div class="resource-image" style="background-image: url('../static/images/crpc.jpg');"></div>
+        <h3>Code of Criminal Procedure (CrPC)</h3>
+        <p class="resource-description">Procedural law for criminal proceedings in India</p>
+        <div class="button-container">
+          <a href="{{ url_for('static', filename='files/the_code_of_criminal_procedure,_1973.pdf') }}" download class="download-btn">
+            <i class="fas fa-download"></i> Download PDF
+          </a>
+        </div>
+      </div>
+
+      <div class="resource-card">
+        <div class="resource-icon"><i class="fas fa-balance-scale"></i></div>
+        <div class="resource-image" style="background-image: url('../static/images/cpc.jpg');"></div>
+        <h3>Code of Civil Procedure (CPC)</h3>
+        <p class="resource-description">Procedural law for civil cases in India</p>
+        <div class="button-container">
+          <a href="{{ url_for('static', filename='files/ipc_sections.pdf') }}" download class="download-btn">
+            <i class="fas fa-download"></i> Download PDF
+          </a>
+        </div>
+      </div>
+
+      <div class="resource-card">
+        <div class="resource-icon"><i class="fas fa-file-signature"></i></div>
+        <div class="resource-image" style="background-image: url('../static/images/ica.jpg');"></div>
+        <h3>Indian Contract Act</h3>
+        <p class="resource-description">Governing law for contracts in India</p>
+        <div class="button-container">
+          <a href="{{ url_for('static', filename='files/contract.pdf') }}" download class="download-btn">
+            <i class="fas fa-download"></i> Download PDF
+          </a>
+        </div>
+      </div>
+
+      <div class="resource-card">
+        <div class="resource-icon"><i class="fas fa-user-shield"></i></div>
+        <div class="resource-image" style="background-image: url('../static/images/cpa.jpg');"></div>
+        <h3>Consumer Protection Act</h3>
+        <p class="resource-description">Protection of consumer rights in India</p>
+        <div class="button-container">
+          <a href="{{ url_for('static', filename='files/comsumer.pdf') }}" download class="download-btn">
+            <i class="fas fa-download"></i> Download PDF
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest News Section -->
+  <section class="latest-news-section">
+    <div class="section-header">
+      <h2>Latest Legal News in India</h2>
+      <p class="section-subtitle">Stay updated with recent legal developments</p>
+      <div class="section-decoration"></div>
+    </div>
+
+    <div class="news-scroll-container">
+      <div class="news-grid">
+        {% if news %}
+          {% for article in news %}
+            <div class="news-card">
+              <div class="news-image-container">
+                <img src="{{ article.urlToImage if article.urlToImage else url_for('static', filename='images/bk19.jpg') }}" 
+                     alt="News Image">
+                <div class="news-date-badge">
+                  <i class="far fa-calendar-alt"></i> {{ article.publishedAt[:10] if article.publishedAt else "Recent" }}
+                </div>
+              </div>
+              <div class="news-content">
+                <h3>{{ article.title }}</h3>
+                <p class="news-excerpt">{{ article.description }}</p>
+                <div class="button-container">
+                  <a href="{{ article.url }}" target="_blank" class="read-more-btn">
+                    Read More <i class="fas fa-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="no-news-message">
+            <i class="fas fa-newspaper"></i>
+            <p>No news available at the moment. Please check back later.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Legal Tips & FAQs Section -->
+  <section class="legal-tips-section">
+    <div class="section-header">
+      <h2>Legal Tips & FAQs</h2>
+      <p class="section-subtitle">Practical guidance for common legal situations</p>
+      <div class="section-decoration"></div>
+    </div>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon"><i class="fas fa-hand-paper"></i></div>
+        <h3>What to Do If You're Arrested?</h3>
+        <p class="tip-description">Know your rights and the steps to take if you're arrested to protect yourself legally.</p>
+        <div class="button-container">
+          <a href="#" class="learn-more-btn">
+            Learn More <i class="fas fa-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon"><i class="fas fa-shopping-cart"></i></div>
+        <h3>How to File a Consumer Complaint?</h3>
+        <p class="tip-description">Step-by-step guide to filing a consumer complaint in India with proper documentation.</p>
+        <div class="button-container">
+          <a href="#" class="learn-more-btn">
+            Learn More <i class="fas fa-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon"><i class="fas fa-home"></i></div>
+        <h3>Understanding Property Laws</h3>
+        <p class="tip-description">Learn about property registration, ownership transfer, and dispute resolution processes.</p>
+        <div class="button-container">
+          <a href="#" class="learn-more-btn">
+            Learn More <i class="fas fa-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon"><i class="fas fa-heart-broken"></i></div>
+        <h3>Divorce Laws in India</h3>
+        <p class="tip-description">Everything you need to know about divorce laws, procedures, and settlement options.</p>
+        <div class="button-container">
+          <a href="#" class="learn-more-btn">
+            Learn More <i class="fas fa-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter-section">
+    <div class="newsletter-container">
+      <div class="newsletter-content">
+        <h3>Stay Updated with Legal Developments</h3>
+        <p>Subscribe to our newsletter for monthly legal insights and updates</p>
+      </div>
+      <div class="newsletter-form">
+        <input type="email" placeholder="Enter your email address">
+        <button class="subscribe-btn">Subscribe</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/document_assistance.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+<div class="container">
+    <h1><i class="fas fa-file-pdf"></i> Talk with your Document</h1>
+
+    <!-- File upload form -->
+    <form id="pdf-form" enctype="multipart/form-data">
+        <div class="upload-section">
+            <label for="pdf-upload" class="upload-label">
+                <i class="fas fa-upload"></i> Upload PDF
+            </label>
+            <input type="file" id="pdf-upload" name="pdf" accept=".pdf" style="display: none;">
+            <div class="upload-options">
+                <button type="button" onclick="document.getElementById('pdf-upload').click()">
+                    <i class="fas fa-folder-open"></i> Browse from PC
+                </button>
+                <button type="button" onclick="alert('Upload from Drive is not implemented yet.')">
+                    <i class="fab fa-google-drive"></i> Upload from Drive
+                </button>
+                <button type="submit">
+                    <i class="fas fa-upload"></i> Upload PDF
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div class="chat-section">
+        <input type="text" id="user-input" placeholder="Ask a question about the PDF...">
+        <button id="send-btn"><i class="fas fa-paper-plane"></i> Ask</button>
+    </div>
+    <div id="chat-box"></div>
+</div>
+
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const sendBtn = document.getElementById('send-btn');
+    const userInput = document.getElementById('user-input');
+    const pdfForm = document.getElementById('pdf-form');
+    const pdfUpload = document.getElementById('pdf-upload');
+
+    // PDF Upload Handler
+    pdfForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const file = pdfUpload.files[0];
+        if (!file) {
+            alert('Please select a PDF file.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('pdf', file);
+
+        try {
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+            if (response.ok) {
+                chatBox.innerHTML += `
+                    <div class="chat-message bot system">
+                        <div class="message"><strong>System:</strong> Uploaded PDF: <em>${file.name}</em></div>
+                    </div>`;
+            } else {
+                chatBox.innerHTML += `
+                    <div class="chat-message bot error">
+                        <div class="message"><strong>Error:</strong> ${data.error}</div>
+                    </div>`;
+            }
+        } catch (error) {
+            chatBox.innerHTML += `
+                <div class="chat-message bot error">
+                    <div class="message"><strong>Error:</strong> ${error.message}</div>
+                </div>`;
+        }
+    });
+
+    // Question Ask Handler
+    sendBtn.addEventListener('click', async () => {
+        const userMessage = userInput.value.trim();
+        if (!userMessage) {
+            alert('Please enter a question.');
+            return;
+        }
+
+        chatBox.innerHTML += `
+            <div class="chat-message user">
+                <div class="message"><strong>You:</strong> ${userMessage}</div>
+            </div>`;
+
+        userInput.value = '';
+
+        chatBox.innerHTML += `
+            <div class="chat-message bot">
+                <div class="message loading">
+                    <i class="fas fa-spinner fa-spin"></i> Thinking...
+                </div>
+            </div>`;
+
+        try {
+            const response = await fetch('/chat_with_document', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userMessage }),
+            });
+            const data = await response.json();
+
+            const loadingMessage = chatBox.querySelector('.loading');
+            if (loadingMessage) loadingMessage.remove();
+
+            if (data.response) {
+                chatBox.innerHTML += `
+                    <div class="chat-message bot">
+                        <div class="message"><strong>Legal Chatbot:</strong> ${data.response}</div>
+                    </div>`;
+            } else if (data.error) {
+                chatBox.innerHTML += `
+                    <div class="chat-message bot error">
+                        <div class="message"><strong>Error:</strong> ${data.error}</div>
+                    </div>`;
+            }
+        } catch (error) {
+            const loadingMessage = chatBox.querySelector('.loading');
+            if (loadingMessage) loadingMessage.remove();
+
+            chatBox.innerHTML += `
+                <div class="chat-message bot error">
+                    <div class="message"><strong>Error:</strong> ${error.message}</div>
+                </div>`;
+        }
+    });
+</script>
+{% endblock %}

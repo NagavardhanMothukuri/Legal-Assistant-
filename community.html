@@ -1,0 +1,552 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<link rel="stylesheet" href="../static/css/community.css">
+
+<div class="container">
+    <!-- Animated Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content animate__animated animate__fadeIn">
+            <h1 class="page-title">Community Hub</h1>
+            <p class="subtitle">Connect with experts, share knowledge, and solve problems together</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">{{ other_queries|length + user_queries|length }}</span>
+                    <span class="stat-label">Total Queries</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{ other_queries|groupby('domain')|list|length }}</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{ user_queries|length }}</span>
+                    <span class="stat-label">Your Queries</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Action Bar -->
+    <div class="action-bar glass-effect">
+        <div class="search-container">
+            <input type="text" id="querySearch" placeholder="Search for topics, queries, domains..." class="search-input">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+        <div class="action-buttons">
+            <a href="{{ url_for('post_query', id=user._id) }}" class="btn btn-primary btn-glow no-underline">
+                <i class="fas fa-plus-circle"></i> <span>New Query</span>
+            </a>
+            <button class="btn btn-icon theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Quick Filter Chips -->
+    <div class="filter-chips">
+        <button class="filter-chip active" data-filter="all">All Categories</button>
+        {% for domain, _ in other_queries|groupby('domain') %}
+            <button class="filter-chip" data-filter="{{ domain }}">{{ domain }}</button>
+        {% endfor %}
+    </div>
+
+    <!-- Dashboard Stats -->
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-question-circle"></i>
+            </div>
+            <div class="stat-details">
+                <h3>{{ user_queries|length }}</h3>
+                <p>Questions Asked</p>
+            </div>
+            <div class="stat-trend positive">
+                <i class="fas fa-arrow-up"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-comment-dots"></i>
+            </div>
+            <div class="stat-details">
+                <h3>{{ user_queries|selectattr('replies')|map(attribute='replies')|sum|default(0, true) }}</h3>
+                <p>Responses</p>
+            </div>
+            <div class="stat-trend positive">
+                <i class="fas fa-arrow-up"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div class="stat-details">
+                <h3>{{ user_queries|selectattr('replies')|list|length }}</h3>
+                <p>Solved Queries</p>
+            </div>
+            <div class="stat-trend neutral">
+                <i class="fas fa-minus"></i>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-details">
+                <h3>{{ other_queries|length }}</h3>
+                <p>Community Questions</p>
+            </div>
+            <div class="stat-trend positive">
+                <i class="fas fa-arrow-up"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Your Queries Section -->
+    <section class="queries-section">
+        <div class="section-header with-gradient">
+            <div class="header-content">
+                <h2 class="section-title"><i class="fas fa-user-edit"></i> Your Queries</h2>
+                <p class="section-subtitle">Questions you've asked the community</p>
+            </div>
+            <div class="section-controls">
+                <button class="control-btn fancy-btn active" data-filter="all">All</button>
+                <button class="control-btn fancy-btn" data-filter="answered">Answered</button>
+                <button class="control-btn fancy-btn" data-filter="unanswered">Unanswered</button>
+                <button class="view-toggle" id="gridViewToggle"><i class="fas fa-th-large"></i></button>
+                <button class="view-toggle" id="listViewToggle"><i class="fas fa-list"></i></button>
+            </div>
+        </div>
+
+        <div class="queries-container grid-view">
+            {% if user_queries %}
+                {% for query in user_queries %}
+                    <div class="query-card animate__animated animate__fadeIn" data-status="{{ 'answered' if query.replies else 'unanswered' }}" data-domain="{{ query.domain }}">
+                        <div class="query-status-indicator {{ 'active' if query.replies else 'pending' }}"></div>
+                        <div class="query-header">
+                            <span class="query-domain">{{ query.domain }}</span>
+                            <span class="query-date"><i class="far fa-calendar-alt"></i> {{ query.date_posted.strftime('%b %d, %Y') }}</span>
+                        </div>
+                        <h3 class="query-title">{{ query.title }}</h3>
+                        <div class="query-content">
+                            <p class="query-description">{{ query.description }}</p>
+                        </div>
+                        <div class="query-stats">
+                            <span class="stat"><i class="fas fa-reply"></i> {{ query.replies|length if query.replies else 0 }}</span>
+                            <span class="stat"><i class="fas fa-eye"></i> {{ query.views|default(0) }}</span>
+                            <span class="query-age">{{ (now - query.date_posted).days if now is defined else 0 }} days ago</span>
+                        </div>
+                        <div class="query-actions">
+                            <button class="btn btn-secondary view-replies ripple-effect" data-query-id="query{{ loop.index }}">
+                                <i class="fas fa-comment-dots"></i> {{ 'View' if query.replies else 'No' }} Replies
+                            </button>
+                            <button class="btn btn-icon query-options">
+                                <i class="fas fa-ellipsis-v"></i>
+                                <div class="dropdown-menu">
+                                    <a href="#"><i class="fas fa-edit"></i> Edit</a>
+                                    <a href="#"><i class="fas fa-share-alt"></i> Share</a>
+                                    <a href="#" class="text-danger"><i class="fas fa-trash-alt"></i> Delete</a>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- Enhanced Replies Section -->
+                        <div class="replies hidden" id="query{{ loop.index }}">
+                            <div class="replies-header">
+                                <h4><i class="fas fa-comments"></i> Responses ({{ query.replies|length if query.replies else 0 }})</h4>
+                                <button class="btn-close-replies"><i class="fas fa-times"></i></button>
+                            </div>
+                            {% if query.replies %}
+                                {% for reply in query.replies %}
+                                    <div class="reply-card">
+                                        <div class="reply-header">
+                                            <div class="replier-info">
+                                                <span class="replier-avatar">{{ reply.replyer[:1] }}</span>
+                                                <div class="replier-details">
+                                                    <span class="replier-name">{{ reply.replyer }}</span>
+                                                    <span class="reply-date">{{ reply.timestamp.strftime('%b %d, %Y') }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="reply-actions">
+                                                <button class="btn-icon reply-action"><i class="far fa-thumbs-up"></i></button>
+                                                <button class="btn-icon reply-action"><i class="far fa-thumbs-down"></i></button>
+                                            </div>
+                                        </div>
+                                        <p class="reply-text">{{ reply.text }}</p>
+                                    </div>
+                                {% endfor %}
+                                <div class="add-reply-section">
+                                    <textarea placeholder="Add your response..." class="reply-input"></textarea>
+                                    <button class="btn btn-primary btn-sm">Submit</button>
+                                </div>
+                            {% else %}
+                                <div class="no-replies">
+                                    <div class="empty-illustration">
+                                        <i class="fas fa-comment-slash"></i>
+                                    </div>
+                                    <p>No replies yet. Your query is awaiting community expertise.</p>
+                                    <p class="helper-text">Usually queries receive responses within 24-48 hours.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-illustration">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3>No Queries Posted Yet</h3>
+                    <p>Share your questions with the community and get expert help</p>
+                    <a href="{{ url_for('post_query', id=user._id) }}" class="btn btn-primary btn-lg mt-3">
+                        <i class="fas fa-plus-circle"></i> Post Your First Query
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Help Others Section -->
+    <section class="help-section">
+        <div class="section-header with-gradient alternate">
+            <div class="header-content">
+                <h2 class="section-title"><i class="fas fa-hands-helping"></i> Help The Community</h2>
+                <p class="section-subtitle">Share your expertise by answering community questions</p>
+            </div>
+            <div class="section-controls">
+                <div class="dropdown-select">
+                    <button class="dropdown-toggle">
+                        <span>Sort By: Recent</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#" class="active">Recent</a>
+                        <a href="#">Most Viewed</a>
+                        <a href="#">Oldest</a>
+                        <a href="#">Unanswered</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="domain-panels">
+            {% if other_queries %}
+                {% for domain, queries in other_queries|groupby('domain') %}
+                    <div class="domain-panel animate__animated animate__fadeIn" data-domain="{{ domain }}">
+                        <div class="domain-header">
+                            <h3 class="domain-title">{{ domain }}</h3>
+                            <div class="domain-meta">
+                                <span class="query-count">{{ queries|length }} {{ 'query' if queries|length == 1 else 'queries' }}</span>
+                                <button class="domain-expand" data-domain="{{ domain }}">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="query-grid">
+                            {% for query in queries %}
+                                <div class="query-card community-query">
+                                    <div class="query-priority {{ 'high' if loop.index % 3 == 1 else 'medium' if loop.index % 3 == 2 else 'low' }}">
+                                        <span class="priority-indicator"></span>
+                                        <span class="priority-text">{{ 'High' if loop.index % 3 == 1 else 'Medium' if loop.index % 3 == 2 else 'Low' }}</span>
+                                    </div>
+                                    <div class="query-header">
+                                        <span class="query-badge">{{ query.domain }}</span>
+                                        <span class="query-date"><i class="far fa-calendar-alt"></i> {{ query.date_posted.strftime('%b %d, %Y') }}</span>
+                                    </div>
+                                    <h3 class="query-title">{{ query.title }}</h3>
+                                    <div class="query-content">
+                                        <p class="query-description">{{ query.description }}</p>
+                                    </div>
+                                    <div class="query-meta">
+                                        <div class="user-info">
+                                            <span class="user-avatar">{{ query.questioner_id[:1] if query.questioner_id else 'U' }}</span>
+                                            <span class="user-name">{{ query.questioner_id if query.questioner_id else 'User' }}</span>
+                                        </div>
+                                        <span class="query-age">{{ (now - query.date_posted).days if now is defined else 0 }} days ago</span>
+                                    </div>
+                                    <div class="query-footer">
+                                        <a href="{{ url_for('reply', query_id=query._id, id=user._id) }}" class="btn btn-tertiary ripple-effect">
+                                            <i class="fas fa-reply"></i> Respond Now
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-illustration">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>No Community Queries Available</h3>
+                    <p>There are currently no questions from the community that need answers</p>
+                    <p class="helper-text">Check back later or be the first to ask a question!</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Community Trends Section -->
+    <section class="trends-section">
+        <div class="section-header">
+            <h2 class="section-title"><i class="fas fa-chart-line"></i> Community Trends</h2>
+            <p class="section-subtitle">Popular topics and active discussions</p>
+        </div>
+        
+        <div class="trends-container">
+            <div class="trend-card">
+                <div class="trend-header">Top Domains</div>
+                <div class="trend-content">
+                    <div class="trend-item">
+                        <div class="trend-name">Technology</div>
+                        <div class="trend-bar">
+                            <div class="trend-progress" style="width: 85%"></div>
+                        </div>
+                        <div class="trend-value">85%</div>
+                    </div>
+                    <div class="trend-item">
+                        <div class="trend-name">Science</div>
+                        <div class="trend-bar">
+                            <div class="trend-progress" style="width: 72%"></div>
+                        </div>
+                        <div class="trend-value">72%</div>
+                    </div>
+                    <div class="trend-item">
+                        <div class="trend-name">Business</div>
+                        <div class="trend-bar">
+                            <div class="trend-progress" style="width: 63%"></div>
+                        </div>
+                        <div class="trend-value">63%</div>
+                    </div>
+                    <div class="trend-item">
+                        <div class="trend-name">Arts</div>
+                        <div class="trend-bar">
+                            <div class="trend-progress" style="width: 41%"></div>
+                        </div>
+                        <div class="trend-value">41%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="trend-card">
+                <div class="trend-header">Query Activity</div>
+                <div class="trend-chart">
+                    <div class="chart-bar" style="height: 30%"><span class="tooltip">Mon</span></div>
+                    <div class="chart-bar" style="height: 60%"><span class="tooltip">Tue</span></div>
+                    <div class="chart-bar" style="height: 45%"><span class="tooltip">Wed</span></div>
+                    <div class="chart-bar" style="height: 75%"><span class="tooltip">Thu</span></div>
+                    <div class="chart-bar active" style="height: 90%"><span class="tooltip">Fri</span></div>
+                    <div class="chart-bar" style="height: 40%"><span class="tooltip">Sat</span></div>
+                    <div class="chart-bar" style="height: 30%"><span class="tooltip">Sun</span></div>
+                </div>
+            </div>
+            
+            <div class="trend-card">
+                <div class="trend-header">Response Times</div>
+                <div class="trend-content">
+                    <div class="metric-circle">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            <path class="circle" stroke-dasharray="75, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            <text x="18" y="20.35" class="percentage">75%</text>
+                        </svg>
+                        <p>Answered within 24hrs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer with quick actions -->
+    <footer class="community-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Actions</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-plus-circle"></i> New Query</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> FAQs</a></li>
+                    <li><a href="#"><i class="fas fa-book"></i> Community Guidelines</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Join the Discussion</h3>
+                <p>Stay updated with the latest community activities</p>
+                <div class="notification-toggle">
+                    <span>Email Notifications</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Community Hub. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- Back to top button -->
+<button id="backToTop" class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<script>
+<!-- Enhanced JavaScript -->
+document.addEventListener("DOMContentLoaded", function () {
+  // Background color change for light mode
+  const lightModeColors = ['#f8f9fa', '#e3f2fd', '#fff3e0', '#e8f5e9', '#fce4ec'];
+  let currentColorIndex = 0;
+
+  function updateBackgroundColor() {
+    if (!document.body.classList.contains('dark-theme')) {
+      document.body.style.backgroundColor = lightModeColors[currentColorIndex];
+      currentColorIndex = (currentColorIndex + 1) % lightModeColors.length;
+    }
+  }
+  setInterval(updateBackgroundColor, 3000); // every 3 seconds
+
+  // Initial background color on load if light mode
+  if (!document.body.classList.contains('dark-theme')) {
+    updateBackgroundColor();
+  }
+
+  // Display current year
+  const yearElement = document.getElementById("year");
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
+
+  // Dark mode toggle
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function () {
+      document.body.classList.toggle('dark-theme');
+      const icon = this.querySelector('i');
+      if (document.body.classList.contains('dark-theme')) {
+        icon.className = 'fas fa-sun';
+        localStorage.setItem('theme', 'dark');
+        document.body.style.backgroundColor = ''; // reset background on dark mode
+      } else {
+        icon.className = 'fas fa-moon';
+        localStorage.setItem('theme', 'light');
+        updateBackgroundColor(); // update background on light mode
+      }
+    });
+  }
+
+  // Load saved theme preference
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-theme');
+    if (themeToggle) {
+      themeToggle.querySelector('i').className = 'fas fa-sun';
+    }
+  } else {
+    updateBackgroundColor();
+  }
+
+  // Handle reply button clicks
+  const replyButtons = document.querySelectorAll(".reply-btn");
+  replyButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const replyContainer = button.parentElement.nextElementSibling;
+      if (replyContainer) {
+        replyContainer.style.display = replyContainer.style.display === "block" ? "none" : "block";
+      }
+    });
+  });
+
+  // Handle reply submission
+  const submitReplyButtons = document.querySelectorAll(".submit-reply-btn");
+  submitReplyButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const textarea = button.previousElementSibling;
+      if (textarea && textarea.value.trim() !== "") {
+        alert("Reply submitted: " + textarea.value.trim());
+        textarea.value = "";
+      } else {
+        alert("Please enter a reply before submitting.");
+      }
+    });
+  });
+
+  // Search functionality
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      const searchTerm = this.value.toLowerCase();
+      const posts = document.querySelectorAll(".post, .reply");
+      posts.forEach(post => {
+        const text = post.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          post.style.display = "block";
+          if (searchTerm.length > 0) {
+            highlightText(post, searchTerm);
+          } else {
+            post.innerHTML = post.textContent; // remove highlights if search empty
+          }
+        } else {
+          post.style.display = "none";
+        }
+      });
+    });
+  }
+
+  // Filter buttons
+  const filterButtons = document.querySelectorAll(".filter-btn");
+  filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const filter = button.getAttribute("data-filter");
+      const posts = document.querySelectorAll(".post");
+      posts.forEach(post => {
+        if (filter === "all" || post.classList.contains(filter)) {
+          post.style.display = "block";
+        } else {
+          post.style.display = "none";
+        }
+      });
+    });
+  });
+
+  // Toggle view button
+  const toggleViewButton = document.getElementById("toggleView");
+  const postsContainer = document.getElementById("postsContainer");
+  if (toggleViewButton && postsContainer) {
+    toggleViewButton.addEventListener("click", () => {
+      postsContainer.classList.toggle("grid-view");
+      if (postsContainer.classList.contains("grid-view")) {
+        toggleViewButton.textContent = "Switch to List View";
+      } else {
+        toggleViewButton.textContent = "Switch to Grid View";
+      }
+    });
+  }
+});
+
+// Utility: Highlight search terms inside text elements
+function highlightText(element, searchTerm) {
+  const text = element.textContent;
+  const regex = new RegExp(`(${searchTerm})`, 'gi');
+  const highlighted = text.replace(regex, '<span class="highlight">$1</span>');
+  element.innerHTML = highlighted;
+}
+</script>
+{% endblock %}

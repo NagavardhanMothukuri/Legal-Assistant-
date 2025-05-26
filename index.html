@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeJurist - Legal Services</title>
+    <!-- SweetAlert (For Flash Messages) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.12.5/dist/sweetalert2.all.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    {% for category, message in messages %}
+                        Swal.fire({
+                            icon: '{{ "success" if category == "success" else "error" if category == "danger" else "info" }}',
+                            title: '{{ "Success!" if category == "success" else "Error!" if category == "danger" else "Information" }}',
+                            text: '{{ message }}',
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                    {% endfor %}
+                });
+            </script>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon"><i class="fas fa-gavel"></i></span>
+                <span class="logo-text">CodeJurist</span>
+            </div>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-toggle-label">
+                <span></span>
+            </label>
+            <nav class="nav-links">
+                <a href="#services" class="nav-item"><i class="fas fa-briefcase"></i> Services</a>
+                <a href="#about" class="nav-item"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#contact" class="nav-item"><i class="fas fa-envelope"></i> Contact</a>
+            </nav>
+            <div class="auth-buttons">
+                <a href="{{ url_for('login') }}" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="{{ url_for('register') }}" class="register-btn"><i class="fas fa-user-plus"></i> Register</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+            <h1 class="hero-title">Expert Legal Solutions <span class="highlight">for You</span></h1>
+            <p class="hero-subtitle">Providing trusted legal services with professionalism and integrity.</p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('login') }}" class="hero-btn primary-btn"><i class="fas fa-balance-scale"></i> Get Legal Assistance</a>
+                <a href="#services" class="hero-btn secondary-btn"><i class="fas fa-arrow-down"></i> Explore Services</a>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                <span class="stat-number">10K+</span>
+                <span class="stat-text">Clients Served</span>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
+                <span class="stat-number">95%</span>
+                <span class="stat-text">Success Rate</span>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="600">
+                <span class="stat-number">24/7</span>
+                <span class="stat-text">Support</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Our <span class="highlight">Services</span></h2>
+                <p class="section-subtitle">Comprehensive legal solutions powered by technology</p>
+            </div>
+            <div class="service-grid">
+                <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3>Latest Legal News & Updates</h3>
+                    <p>Stay informed with the latest legal developments and trends in the industry.</p>
+                    <a href="{{ url_for('login') }}" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="service-icon">
+                        <i class="fas fa-search-location"></i>
+                    </div>
+                    <h3>Find Nearby Lawyers</h3>
+                    <p>Locate experienced lawyers in your area specialized in your specific legal needs.</p>
+                    <a href="{{ url_for('login') }}" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="service-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Support</h3>
+                    <p>Join our legal community for support, advice and collaboration on legal matters.</p>
+                    <a href="{{ url_for('login') }}" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="service-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>PDF Legal Document Summarization</h3>
+                    <p>Simplify complex legal documents with our AI-powered summary generation tool.</p>
+                    <a href="{{ url_for('login') }}" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="service-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI Legal Assistant</h3>
+                    <p>Get instant answers to your legal questions with our advanced AI-powered chatbot.</p>
+                    <a href="{{ url_for('login') }}" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="service-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Legal Document Templates</h3>
+                    <p>Access professionally crafted legal templates for various needs and situations.</p>
+                    <a href="{{ url_for('login') }}" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-container">
+                <div class="about-image" data-aos="fade-right">
+                    <div class="image-frame">
+                        <img src="{{ url_for('static', filename='images/index3.jpg') }}" alt="About CodeJurist">
+                    </div>
+                    <div class="experience-badge">
+                        <span class="years">5+</span>
+                        <span class="text">Years of Excellence</span>
+                    </div>
+                </div>
+                <div class="about-text" data-aos="fade-left">
+                    <div class="section-header">
+                        <h2 class="section-title">About <span class="highlight">Us</span></h2>
+                    </div>
+                    <p class="about-intro">
+                        We are a passionate <strong>tech team</strong> on a mission to make legal help <strong>free and accessible</strong> to everyone in India.
+                    </p>
+                    <p>
+                        By leveraging the power of <strong>AI and technology</strong>, we aim to bridge the gap between legal expertise and those who need it the most.
+                    </p>
+                    <p>
+                        Our platform provides innovative solutions like <strong>AI-powered legal document summarization</strong>, 
+                        <strong>chatbots for instant legal queries</strong>, and tools to <strong>find nearby lawyers</strong>. 
+                        We believe that everyone deserves access to justice, and we're here to make that a reality.
+                    </p>
+                    <p>
+                        Join us in our journey to democratize legal assistance and empower individuals with the knowledge and tools they need to navigate the legal system.
+                    </p>
+                    <div class="about-features">
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>24/7 Customer Support</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Free Legal Resources</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>AI-Powered Solutions</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Verified Legal Experts</span>
+                        </div>
+                    </div>
+                    <a href="#contact" class="about-cta">Contact Us Today</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Client <span class="highlight">Testimonials</span></h2>
+                <p class="section-subtitle">What our clients say about our services</p>
+            </div>
+            <div class="testimonial-slider" data-aos="fade-up">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <i class="fas fa-quote-left"></i>
+                        <p>CodeJurist helped me understand my legal rights and options when I needed it most. Their AI assistant was incredibly helpful and responsive!</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-image">
+                            <img src="../static/images/cost.webp" alt="Testimonial Author">
+                        </div>
+                        <div class="testimonial-info">
+                            <h4>Raj Sharma</h4>
+                            <p>Business Owner</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <i class="fas fa-quote-left"></i>
+                        <p>The document summarization tool saved me hours of reading complex legal documents. I could quickly understand the key points without legal training.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-image">
+                            <img src="../static/images/girl.jpeg" alt="Testimonial Author">
+                        </div>
+                        <div class="testimonial-info">
+                            <h4>Priya Patel</h4>
+                            <p>Startup Founder</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <i class="fas fa-quote-left"></i>
+                        <p>Finding a qualified lawyer in my area was so easy with CodeJurist. The platform connected me with an excellent attorney who resolved my case successfully.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-image">
+                            <img src="../static/images/cost2.webp" alt="Testimonial Author">
+                        </div>
+                        <div class="testimonial-info">
+                            <h4>Vikram Singh</h4>
+                            <p>Software Engineer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-form">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Contact <span class="highlight">Us</span></h2>
+                <p class="section-subtitle">Get in touch with our legal experts for assistance</p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info" data-aos="fade-right">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Our Location</h3>
+                            <p>123 Legal Street, Lawtown</p>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Phone Number</h3>
+                            <p>+91 8328598197</p>
+                        </div>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Email Address</h3>
+                            <p>contact@codejurist.com</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <!-- Contact Form with Flask-WTF Integration -->
+                <form class="contact-form-container" action="{{ url_for('submit_contact') }}" method="POST" data-aos="fade-left">
+                    {{ contact_form.hidden_tag() }}
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                        {{ contact_form.name(id="name", class="form-control", placeholder="Enter your full name", required=true) }}
+                        {% if contact_form.name.errors %}
+                            <div class="error-feedback">
+                                {% for error in contact_form.name.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                        {{ contact_form.email(id="email", class="form-control", placeholder="Enter your email address", required=true) }}
+                        {% if contact_form.email.errors %}
+                            <div class="error-feedback">
+                                {% for error in contact_form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="subject"><i class="fas fa-tag"></i> Subject</label>
+                        {{ contact_form.subject(id="subject", class="form-control", placeholder="Enter subject", required=true) }}
+                        {% if contact_form.subject.errors %}
+                            <div class="error-feedback">
+                                {% for error in contact_form.subject.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="message"><i class="fas fa-comment-alt"></i> Your Message</label>
+                        {{ contact_form.message(id="message", class="form-control", placeholder="Type your message here...", rows=5, required=true) }}
+                        {% if contact_form.message.errors %}
+                            <div class="error-feedback">
+                                {% for error in contact_form.message.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {{ contact_form.submit(class="submit-btn") }}
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content" data-aos="zoom-in">
+                <h2>Are you ready to get started?</h2>
+                <p>Join thousands of satisfied clients and experience our innovative legal solutions today.</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('register') }}" class="cta-btn primary-btn"><i class="fas fa-user-plus"></i> Sign Up Now</a>
+                    <a href="#contact" class="cta-btn secondary-btn"><i class="fas fa-question-circle"></i> Ask Questions</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <i class="fas fa-gavel"></i> CodeJurist
+                    </div>
+                    <p class="footer-description">Providing innovative legal solutions powered by technology to make justice accessible for all.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#services"><i class="fas fa-chevron-right"></i> Services</a></li>
+                        <li><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                        <li><a href="{{ url_for('login') }}"><i class="fas fa-chevron-right"></i> Login</a></li>
+                        <li><a href="{{ url_for('register') }}"><i class="fas fa-chevron-right"></i> Register</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-heading">Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('login') }}"><i class="fas fa-chevron-right"></i> Legal News</a></li>
+                        <li><a href="{{ url_for('login') }}"><i class="fas fa-chevron-right"></i> Find Lawyers</a></li>
+                        <li><a href="{{ url_for('login') }}"><i class="fas fa-chevron-right"></i> Legal Community</a></li>
+                        <li><a href="{{ url_for('login') }}"><i class="fas fa-chevron-right"></i> Document Summarization</a></li>
+                        <li><a href="{{ url_for('login') }}"><i class="fas fa-chevron-right"></i> Legal Chatbot</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-heading">Newsletter</h3>
+                    <p>Subscribe to our newsletter for legal updates and tips.</p>
+                    <!-- Newsletter Form with Flask-WTF Integration -->
+                    <form class="footer-form" action="{{ url_for('subscribe_newsletter') }}" method="POST">
+                        {{ newsletter_form.hidden_tag() }}
+                        {{ newsletter_form.email(placeholder="Your Email", required=true) }}
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CodeJurist. All Rights Reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">FAQ</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS
+            AOS.init();
+            
+            // Back to Top button functionality
+            const backToTopButton = document.querySelector('.back-to-top');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+            
+            backToTopButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+            
+            // Navbar scroll effect
+            const navbar = document.querySelector('.navbar');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 100) {
+                    navbar.style.padding = '0.7rem 0';
+                    navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+                    navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+                } else {
+                    navbar.style.padding = '1rem 0';
+                    navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+                    navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.05)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

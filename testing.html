@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalPlus | Professional Legal Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="static/css/index.css">
+</head>
+<body>
+    <header class="header">
+        <div class="top-bar">
+            <div class="container">
+                <div class="contact-info">
+                    <span><i class="fas fa-phone"></i> +91 8328598197</span>
+                    <span><i class="fas fa-envelope"></i> contact@legalplus.com</span>
+                </div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+        <nav class="nav">
+            <div class="container">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-balance-scale"></i>
+                    <span>Legal<span class="highlight">Plus</span></span>
+                </a>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('services') }}">Services</a></li>
+
+                <a href="{{ url_for('attorneys') }}">Attorneys</a>
+
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="{{ url_for('login') }}" class="btn-secondary">Login</a>
+                    <a href="{{ url_for('register') }}" class="btn-primary">Register</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content animate__animated animate__fadeInLeft">
+                <h1>Expert <span class="highlight">Legal</span> Solutions For Your <span class="highlight">Success</span></h1>
+                <p>Professional legal services with a focus on client success and justice. Our team of experienced attorneys is committed to delivering excellence.</p>
+                <div class="hero-buttons">
+                    <a href="consultation.html" class="btn-primary"><i class="fas fa-calendar-check"></i> Get Consultation</a>
+                    <a href="about.html" class="btn-outline">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image animate__animated animate__fadeInRight">
+                <img src="/api/placeholder/600/500" alt="Legal professional" class="shadow-effect" />
+            </div>
+        </div>
+    </section>
+
+    <section class="services">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">What We Offer</span>
+                <h2 class="section-title">Our Legal Services</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="service-grid">
+                <div class="service-card animate__animated animate__fadeInUp">
+                    <div class="service-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3>Corporate Law</h3>
+                    <p>Comprehensive legal solutions for businesses of all sizes, from startups to multinational corporations.</p>
+                    <a href="services.html#corporate" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                    <div class="service-icon">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <h3>Civil Litigation</h3>
+                    <p>Expert representation in civil court proceedings with a proven track record of success.</p>
+                    <a href="services.html#civil" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="service-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                    <div class="service-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Family Law</h3>
+                    <p>Compassionate legal support for family matters, including divorce, custody, and estate planning.</p>
+                    <a href="services.html#family" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="text-center">
+                <a href="services.html" class="btn-secondary">View All Services</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats parallax-section">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item animate__animated animate__fadeIn">
+                    <span class="stat-number" data-count="1000">1000+</span>
+                    <span class="stat-label">Cases Won</span>
+                </div>
+                <div class="stat-item animate__animated animate__fadeIn" style="animation-delay: 0.2s;">
+                    <span class="stat-number" data-count="50">50+</span>
+                    <span class="stat-label">Expert Attorneys</span>
+                </div>
+                <div class="stat-item animate__animated animate__fadeIn" style="animation-delay: 0.4s;">
+                    <span class="stat-number" data-count="2000">2000+</span>
+                    <span class="stat-label">Happy Clients</span>
+                </div>
+                <div class="stat-item animate__animated animate__fadeIn" style="animation-delay: 0.6s;">
+                    <span class="stat-number" data-count="25">25+</span>
+                    <span class="stat-label">Years Experience</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-choose-us">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Why Choose Us</span>
+                <h2 class="section-title">Legal Excellence You Can Trust</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-item animate__animated animate__fadeInUp">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>Expert Attorneys</h3>
+                    <p>Our team consists of highly qualified attorneys with years of experience in various legal fields.</p>
+                </div>
+                <div class="feature-item animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>Personalized Approach</h3>
+                    <p>We tailor our services to meet the specific needs and circumstances of each client.</p>
+                </div>
+                <div class="feature-item animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Clear Communication</h3>
+                    <p>We maintain open and transparent communication throughout your legal proceedings.</p>
+                </div>
+                <div class="feature-item animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <h3>Affordable Rates</h3>
+                    <p>We offer competitive pricing without compromising on the quality of our services.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="appointment-form">
+        <div class="container">
+            <div class="form-container">
+                <div class="section-header">
+                    <span class="section-subtitle">Get Started</span>
+                    <h2 class="section-title">Schedule a Consultation</h2>
+                    <div class="section-divider"></div>
+                </div>
+                <form class="form-grid" id="consultationForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="Your Name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="Your Email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="Your Phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="practiceArea">Practice Area</label>
+                        <select id="practiceArea" class="form-control" required>
+                            <option value="">Select Practice Area</option>
+                            <option value="corporate">Corporate Law</option>
+                            <option value="civil">Civil Litigation</option>
+                            <option value="family">Family Law</option>
+                            <option value="criminal">Criminal Defense</option>
+                            <option value="real-estate">Real Estate</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="attorney">Preferred Attorney</label>
+                        <select id="attorney" class="form-control">
+                            <option value="">Select Attorney (Optional)</option>
+                            <option value="attorney1">John Smith, Esq.</option>
+                            <option value="attorney2">Jane Doe, Esq.</option>
+                            <option value="attorney3">Michael Johnson, Esq.</option>
+                            <option value="attorney4">Sarah Williams, Esq.</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Preferred Date</label>
+                        <input type="date" id="date" class="form-control" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="description">Case Description</label>
+                        <textarea id="description" placeholder="Brief Description of Your Case" rows="4" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group full-width text-center">
+                        <button type="submit" class="btn-primary"><i class="fas fa-calendar-check"></i> Schedule Consultation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Client Feedback</span>
+                <h2 class="section-title">What Our Clients Say</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="testimonial-slider">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <i class="fas fa-quote-left quote-icon"></i>
+                        <p>LegalPlus provided exceptional service for my corporate legal needs. Their attention to detail and strategic approach helped my business navigate complex legal challenges with ease.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="/api/placeholder/60/60" alt="Client" class="author-img">
+                        <div class="author-info">
+                            <h4>Robert Johnson</h4>
+                            <p>CEO, Tech Innovations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <i class="fas fa-quote-left quote-icon"></i>
+                        <p>During my divorce proceedings, the compassionate team at LegalPlus was by my side every step of the way. Their support and expertise made a difficult time much more manageable.</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="/api/placeholder/60/60" alt="Client" class="author-img">
+                        <div class="author-info">
+                            <h4>Amanda Lewis</h4>
+                            <p>Family Law Client</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section parallax-section">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="cta-content">
+                <h2>Need Legal Assistance?</h2>
+                <p>Contact our team today for a confidential consultation and expert legal advice.</p>
+                <div class="cta-buttons">
+                    <a href="contact.html" class="btn-primary"><i class="fas fa-phone"></i> Contact Us</a>
+                    <a href="tel:+918328598197" class="btn-outline"><i class="fas fa-phone-alt"></i> Call Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <a href="index.html" class="footer-logo">
+                            <i class="fas fa-balance-scale"></i>
+                            <span>Legal<span class="highlight">Plus</span></span>
+                        </a>
+                        <p class="footer-description">Professional legal services with a focus on client success and justice since 2000.</p>
+                        <div class="footer-social">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
